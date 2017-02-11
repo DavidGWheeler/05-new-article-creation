@@ -59,7 +59,7 @@ articleView.handleMainNav = function() {
 articleView.setTeasers = function() {
   $('.article-body *:nth-of-type(n+2)').hide();
 
-  $('#articles').on('click', 'a.read-on', function(e) {
+  $('#article-preview').on('click', 'a.read-on', function(e) {
     e.preventDefault();
     $(this).parent().find('*').fadeIn();
     $(this).hide();
@@ -79,28 +79,38 @@ articleView.initNewArticlePage = function() {
     this.select();
   });
 
-  // TODO: Add an event handler to update the preview and the export field if any inputs change.
-
+  // DONE: Add an event handler to update the preview and the export field if any inputs change.
+  $('#new-form').on('change', articleView.create);
 };
 
 articleView.create = function() {
-  // TODO: Set up a var to hold the new article we are creating.
+  // DONE: Set up a var to hold the new article we are creating.
   // Clear out the #articles element, so we can put in the updated preview
+  var article;
+  $('#article-preview').empty();
 
-
-  // TODO: Instantiate an article based on what's in the form fields:
-
-
-  // TODO: Use our interface to the Handblebars template to put this new article into the DOM:
-
-
-  // TODO: Activate the highlighting of any code blocks:
-  $('pre code').each(function(i, block) {
-
+  // DONE: Instantiate an article based on what's in the form fields:
+  article = new Article({
+    author: $('#article-author').val(),
+    authorUrl: $('#article-author-url').val(),
+    title: $('#article-title').val(),
+    category: $('#article-category').val(),
+    body: $('#article-body').val(),
+    publishedOn: $('#article-published:checked').length ? new Date() : null
   });
 
-  // TODO: Show our export field, and export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
 
+  // DONE: Use our interface to the Handblebars template to put this new article into the DOM:
+  $('#article-preview').append(article.toHtml());
+
+  // DONE: Activate the highlighting of any code blocks:
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+
+  // DONE: Show our export field, and export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
+  $('#export-field').show();
+  $('#article-json').val(JSON.stringify(article) + ',');
 };
 
 
